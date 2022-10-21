@@ -1,0 +1,12 @@
+# statestore.yaml for Azure Table Storage
+componentType: state.azure.tablestorage
+version: v1
+metadata:
+- name: accountName
+  value: azurestatestorage
+- name: accountKey
+  value: uZZzYd/YDPyWZbmitLf99iZu+VQMp34L3IdyJ5rZCG7Bk5TA9VHbPYdxVTDZTE3FJIbdoonFPhes+AStVAVKsw==
+- name: tableName
+  value: daprstatetable
+- name: cosmosDbMode
+  value: false
