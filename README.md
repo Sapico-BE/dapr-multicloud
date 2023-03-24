@@ -1,30 +1,41 @@
-# DAPR Demo Samples
+# DAPR Demo Sample Repository
 
-## Create SPN for Key Vault authorization
-
-az ad app create --display-name "dapr-demoapplication" --available-to-other-tenants false --oauth2-allow-implicit-flow false
-az ad app credential reset --id "d4e2ab14-5aaa-4112-b3cd-17012d1c5d5f" --years 2 --password $(openssl rand -base64 30)
-
-az ad sp create --id "d4e2ab14-5aaa-4112-b3cd-17012d1c5d5f"
-
-{
-  "appId": "d4e2ab14-5aaa-4112-b3cd-17012d1c5d5f",
-  "password": "lR68Q~IGf3z87aqNO5uozknVPMDO87Xjo.1NtakS",
-  "tenant": "9a806aac-c25f-4c69-8f27-9feb78446b4b"
-}
+This repository contains several demo applications in ASP.NET 6 to show the benefits and the power of the Distributed Application Runtime (DAPR). To be able to recreate these demo's yourself you can find some instructions below. 
 
 ## DAPR Commands for start-up
 
+```csharp
 dapr 
 dapr init
 dapr --version
-docker ps
 
-App launch
+// App launch
 dapr run --components-path "C:\Development\dapr-multicloud-demo\components" dotnet run
+```
+
+## DAPR Multicloud Samples
+
+DAPR has great benefits for multicloud purposes, to show this there is a DaprMulticloudDemo application in this repository. This application can:
+
+- Get secrets from a local secret store and Azure Key Vault without changing application code.
+- Write and retrieve state from a local state store or Azure Table Storage without changing application code.
+
+### Setup
+
+Build the application locally using `dotnet build`.
+
+```
+dapr run --components-path "C:\Development\dapr-multicloud-demo\components" dotnet run
+```
+
+### Endpoints
+
+- https://localhost:7299/swagger/index.html
+- http://localhost:5299/swagger/index.html
 
 ## DAPR State Store Demo
 
+```
 dapr run --app-id rockstars --dapr-http-port 3500
 
 Invoke-RestMethod -Method Post -ContentType 'application/json' -Body '[{ "key": "name", "value": "David de Hoop"}]' -Uri 'http://localhost:3500/v1.0/state/statestore'
@@ -33,6 +44,7 @@ Invoke-RestMethod -Uri 'e'
 
 docker exec -it dapr_redis redis-cli
 keys * hgetall "rockstars||name"
+```
 
 ## DAPR on Azure Container Apps
 
@@ -91,19 +103,48 @@ az containerapp create `
   --registry-username daprcontainerappdemo `
   --registry-password NuUX3mdGLLLIx0n7ZN+3pouWvZipenY6
 ```
-## Azure CLI Commands
+
+### Azure CLI Commands
 
 ### Tag Image with version
 
+```
 docker tag daprcontainerappdemo daprcontainerappdemo.azurecr.io/daprcontainerappdemo:v5
+```
 
 ### Push image to ACR
 
+```
 docker push daprcontainerappdemo.azurecr.io/daprcontainerappdemo:v5
+```
 
 ### Create / Update Azure Container App
 
-az containerapp create --name daprdemoapp --resource-group azconf-2022 --environment dapr-demo-managedEnvironment --image daprcontainerappdemo.azurecr.io/daprcontainerappdemo:v5 --target-port 3000 --ingress external --min-replicas 1 --max-replicas 3 --enable-dapr --dapr-app-port 3000 --dapr-app-id daprdemoapp --registry-server daprcontainerappdemo.azurecr.io --registry-username daprcontainerappdemo --registry-password NuUX3mdGLLLIx0n7ZN+3pouWvZipenY6
+```powershell
+az containerapp create 
+--name daprdemoapp 
+--resource-group azconf-2022 
+--environment dapr-demo-managedEnvironment 
+--image daprcontainerappdemo.azurecr.io/daprcontainerappdemo:v5 
+--target-port 3000 
+--ingress external 
+--min-replicas 1 
+--max-replicas 3 
+--enable-dapr 
+--dapr-app-port 3000 
+--dapr-app-id daprdemoapp 
+--registry-server daprcontainerappdemo.azurecr.io 
+--registry-username daprcontainerappdemo 
+--registry-password NuUX3mdGLLLIx0n7ZN+3pouWvZipenY6
+```
 
+## Create SPN for Key Vault authorization for DAPR
 
-daviddehoop.onmicrosoft.com
+For DAPR to communicate with Azure it uses an application registration with a service principal, that you need to create below.
+
+```powershell
+az ad app create --display-name "dapr-demoapplication" --available-to-other-tenants false --oauth2-allow-implicit-flow false
+az ad app credential reset --id "d4e2ab14-5aaa-4112-b3cd-17012d1c5d5f" --years 2 --password $(openssl rand -base64 30)
+
+az ad sp create --id "d4e2ab14-5aaa-4112-b3cd-17012d1c5d5f"
+```

@@ -1,18 +1,20 @@
 <Project Sdk="Microsoft.NET.Sdk.Web">
+
   <PropertyGroup>
-    <TargetFramework>netcoreapp3.1</TargetFramework>
+    <TargetFramework>net6.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <UserSecretsId>ad4c776d-a7d9-4aee-ac79-170a0b0b2528</UserSecretsId>
+    <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
+    <DockerfileContext>.</DockerfileContext>
   </PropertyGroup>
 
   <ItemGroup>
-    <None Remove="components\secretStore.yaml" />
+    <PackageReference Include="Dapr.AspNetCore" Version="1.9.0" />
+    <PackageReference Include="Dapr.Client" Version="1.9.0" />
+    <PackageReference Include="Dapr.Extensions.Configuration" Version="1.9.0" />
+    <PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.17.0" />
+    <PackageReference Include="Swashbuckle.AspNetCore" Version="6.2.3" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Content Include="components\secretStore.yaml" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <PackageReference Include="Dapr.Client" Version="1.7.0" />
-    <PackageReference Include="Dapr.Extensions.Configuration" Version="1.7.0" />
-  </ItemGroup>
 </Project>

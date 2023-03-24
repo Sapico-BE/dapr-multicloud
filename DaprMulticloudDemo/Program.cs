@@ -1,39 +1,22 @@
-using Dapr.Client;
-using Dapr.Extensions.Configuration;
-using Microsoft.AspNetCore.Hosting;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Hosting;
+var builder = WebApplication.CreateBuilder(args);
 
-namespace DaprMulticloudDemo
-{
-    public class Program
-    {
-        public static void Main(string[] args)
-        {
-            CreateHostBuilder(args).Build().Run();
-        }
+// Add services to the container.
 
-        public static IHostBuilder CreateHostBuilder(string[] args)
-        {
-            // Create DAPR Client
-            var client = new DaprClientBuilder()
-                .Build();
+builder.Services.AddControllers();
+// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
+builder.Services.AddEndpointsApiExplorer();
+builder.Services.AddSwaggerGen();
+builder.Services.AddDaprClient();
 
-            return Host.CreateDefaultBuilder(args)
-                .ConfigureServices((services) =>
-                {
-            // Add the DAPR Client to Host.
-            services.AddSingleton<DaprClient>(client);
-                })
-                .ConfigureAppConfiguration((configBuilder) =>
-                {
-            // Add the secret store Configuration Provider to the configuration builder.
-            configBuilder.AddDaprSecretStore("demosecrets", client);
-                })
-                .ConfigureWebHostDefaults(webBuilder =>
-                {
-                    webBuilder.UseStartup<Startup>();
-                });
-        }
-    }
-}
+var app = builder.Build();
+
+app.UseSwagger();
+app.UseSwaggerUI();
+
+app.UseHttpsRedirection();
+
+app.UseAuthorization();
+
+app.MapControllers();
+
+app.Run();
