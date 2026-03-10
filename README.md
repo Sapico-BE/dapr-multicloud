@@ -1,6 +1,6 @@
 # DAPR Demo Sample Repository
 
-This repository contains several demo applications in ASP.NET 6 to show the benefits and the power of the Distributed Application Runtime (DAPR). To be able to recreate these demo's yourself you can find some instructions below. 
+This repository contains several demo applications in .NET 10 to show the benefits and the power of the Distributed Application Runtime (DAPR). To be able to recreate these demo's yourself you can find some instructions below. 
 
 ## DAPR Commands for start-up
 
